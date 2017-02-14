@@ -43,9 +43,13 @@ namespace PKHeX.Core
                 {
                     case 1: parsePK1(pk); break;
                 }
+
+                if (!Parse.Any())
                 switch (pk.GenNumber)
                 {
                     case 6: parsePK6(pk); break;
+
+                    case 1: parsePK7(pk); break;
                     case 7: parsePK7(pk); break;
                 }
 
@@ -247,7 +251,7 @@ namespace PKHeX.Core
         {
             if (pkm == null || !pkm.IsOriginValid())
                 return null;
-            if (pkm.GenNumber < 6 && pkm.Format != 1)
+            if (!Parsed)
                 return new int[4];
             return Legal.getValidMoves(pkm, EvoChain, Tutor: tutor, Machine: tm, MoveReminder: reminder).Skip(1).ToArray(); // skip move 0
         }

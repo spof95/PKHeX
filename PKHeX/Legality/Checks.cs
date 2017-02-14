@@ -115,12 +115,11 @@ namespace PKHeX.Core
                     return;
                 }
             }
-
-            if (pkm.Format < 6)
+            
+            // abort if specimen wasn't transferred x->6
+            if (pkm.Format < 6 || !(3 <= pkm.GenNumber && pkm.GenNumber <= 5))
                 return;
 
-            if (pkm.GenNumber >= 6)
-                return;
             // When transferred to Generation 6, the Encryption Constant is copied from the PID.
             // The PID is then checked to see if it becomes shiny with the new Shiny rules (>>4 instead of >>3)
             // If the PID is nonshiny->shiny, the top bit is flipped.
@@ -415,7 +414,6 @@ namespace PKHeX.Core
                 ? new CheckResult(Severity.Invalid, "Invalid Link Gift: should not be Fateful Encounter.", CheckIdentifier.Encounter)
                 : new CheckResult(Severity.Valid, "Valid Link gift.", CheckIdentifier.Encounter);
         }
-
         private CheckResult verifyEncounterEvent()
         {
             MysteryGift MatchedGift = EncounterMatch as MysteryGift;
@@ -478,7 +476,6 @@ namespace PKHeX.Core
 
             return new CheckResult(Severity.Valid, "Valid Friend Safari encounter.", CheckIdentifier.Encounter);
         }
-
         private CheckResult verifyEncounterWild()
         {
             EncounterSlot[] enc = (EncounterSlot[])EncounterMatch;
@@ -507,8 +504,9 @@ namespace PKHeX.Core
         }
         private CheckResult verifyEncounterStatic()
         {
-            // Re-parse relearn moves
             var s = (EncounterStatic)EncounterMatch;
+
+            // Re-parse relearn moves
             if (s.EggLocation != 60002 || vRelearn.Any(rl => !rl.Valid))
             {
                 for (int i = 0; i < 4; i++)
@@ -519,7 +517,10 @@ namespace PKHeX.Core
             }
             return null;
         }
-
+        private CheckResult verifyEncounterTrade()
+        {
+            return new CheckResult(Severity.Valid, "Valid ingame trade.", CheckIdentifier.Encounter);
+        }
         private CheckResult verifyEncounterG1()
         {
             // Since encounter matching is super weak due to limited stored data in the structure
@@ -537,6 +538,11 @@ namespace PKHeX.Core
             if (sm + em + tm == 3*invalid)
                 return new CheckResult(Severity.Invalid, "Unknown encounter.", CheckIdentifier.Encounter);
 
+            if (s != null && s.Moves[0] != 0 && pkm.Moves.Contains(s.Moves[0]))
+            {
+                EncounterMatch = s;
+                return verifyEncounterStatic();
+            }
             if (em <= sm && em <= tm)
             {
                 EncounterMatch = e;
@@ -561,50 +567,50 @@ namespace PKHeX.Core
                 if ((g1 && baseSpecies > Legal.MaxSpeciesID_1) || (baseSpecies > Legal.MaxSpeciesID_2))
                     return new CheckResult(Severity.Invalid, "VC: Unobtainable species.", CheckIdentifier.Encounter);
                 
+                // Get EncounterMatch prior to parsing transporter legality
+                var result = verifyEncounterG1();
+
                 if (pkm.Format > 2) // transported to 7+
                     Parse.Add(verifyVCEncounter(baseSpecies));
 
-                return verifyEncounterG1();
+                return result;
             }
             
             if (pkm.WasLink)
                 return verifyEncounterLink();
 
-            if (pkm.WasEvent || pkm.WasEventEgg)
+            bool wasEvent = pkm.WasEvent || pkm.WasEventEgg;
+            if (wasEvent)
             {
                 var result = verifyEncounterEvent();
                 if (result != null)
                     return result;
             }
-
-            EncounterMatch = Legal.getValidStaticEncounter(pkm);
-            if (EncounterMatch != null)
+            
+            if (null != (EncounterMatch = Legal.getValidStaticEncounter(pkm)))
             {
                 var result = verifyEncounterStatic();
                 if (result != null)
                     return result;
-            }
 
-            // Reset Encounter Object, test for remaining encounters
-            EncounterMatch = null;
+                EncounterMatch = null; // Reset Encounter Object, test for remaining encounters
+            }
+            
             if (pkm.WasEgg)
                 return verifyEncounterEgg();
-
-            EncounterMatch = Legal.getValidFriendSafari(pkm);
-            if (EncounterMatch != null)
+            
+            if (null != (EncounterMatch = Legal.getValidFriendSafari(pkm)))
                 return verifyEncounterSafari();
-
-            EncounterMatch = Legal.getValidWildEncounters(pkm);
-            if (EncounterMatch != null)
+            
+            if (null != (EncounterMatch = Legal.getValidWildEncounters(pkm)))
                 return verifyEncounterWild();
+            
+            if (null != (EncounterMatch = Legal.getValidIngameTrade(pkm)))
+                return verifyEncounterTrade();
 
-            EncounterMatch = Legal.getValidIngameTrade(pkm);
-            if (EncounterMatch != null)
-                return new CheckResult(Severity.Valid, "Valid ingame trade.", CheckIdentifier.Encounter);
-
-            if (pkm.WasEvent || pkm.WasEventEgg)
-                return new CheckResult(Severity.Invalid, "Unable to match to a Mystery Gift in the database.", CheckIdentifier.Encounter);
-            return new CheckResult(Severity.Invalid, "Unknown encounter.", CheckIdentifier.Encounter);
+            return wasEvent 
+                ? new CheckResult(Severity.Invalid, "Unable to match to a Mystery Gift in the database.", CheckIdentifier.Encounter) 
+                : new CheckResult(Severity.Invalid, "Unknown encounter.", CheckIdentifier.Encounter);
         }
         private CheckResult verifyVCEncounter(int baseSpecies)
         {
@@ -613,7 +619,14 @@ namespace PKHeX.Core
             if ((pkm.VC1 && species > Legal.MaxSpeciesID_1) ||
                 (pkm.VC2 && species > Legal.MaxSpeciesID_2))
                 species = baseSpecies;
-            
+
+            // Check existing EncounterMatch
+            if (EncounterMatch == null)
+                Parse.Add(new CheckResult(Severity.Invalid, "Unable to match an encounter from origin game.", CheckIdentifier.Encounter));
+            var s = EncounterMatch as EncounterStatic;
+            if (s != null && s.Version == GameVersion.SPECIAL)
+                Parse.Add(new CheckResult(Severity.Invalid, "Special encounter is not available to Virtual Console games.", CheckIdentifier.Encounter));
+
             EncounterMatch = new EncounterStatic
             {
                 Species = species,
@@ -636,6 +649,7 @@ namespace PKHeX.Core
 
             return new CheckResult(CheckIdentifier.Encounter);
         }
+
         private void verifyLevel()
         {
             MysteryGift MatchedGift = EncounterMatch as MysteryGift;
@@ -902,12 +916,24 @@ namespace PKHeX.Core
                 }
             }
 
-            if (pkm.GenNumber >= 6 && abilities[pkm.AbilityNumber >> 1] != pkm.Ability)
-                AddLine(Severity.Invalid, "Ability does not match ability number.", CheckIdentifier.Ability);
-            else if (pkm.GenNumber <= 5 && pkm.Version != (int)GameVersion.CXD && abilities[0] != abilities[1] && pkm.PIDAbility != abilval)
-                AddLine(Severity.Invalid, "Ability does not match PID.", CheckIdentifier.Ability);
+            if (3 <= pkm.Format && pkm.Format <= 5) // 3-5
+            {
+                if (pkm.Version != (int) GameVersion.CXD && abilities[0] != abilities[1] && pkm.PIDAbility != abilval)
+                {
+                    AddLine(Severity.Invalid, "Ability does not match PID.", CheckIdentifier.Ability);
+                    return;
+                }
+            }
             else
-                AddLine(Severity.Valid, "Ability matches ability number.", CheckIdentifier.Ability);
+            {
+                if (abilities[pkm.AbilityNumber >> 1] != pkm.Ability)
+                {
+                    AddLine(Severity.Invalid, "Ability does not match ability number.", CheckIdentifier.Ability);
+                    return;
+                }
+            }
+
+            AddLine(Severity.Valid, "Ability matches ability number.", CheckIdentifier.Ability);
         }
         private void verifyBall()
         {
@@ -1117,7 +1143,6 @@ namespace PKHeX.Core
                     ? "Ball unobtainable in origin generation."
                     : "No ball check satisfied, assuming illegal.", CheckIdentifier.Ball);
         }
-
         private void verifyEggBallGen7()
         {
             var Lineage = Legal.getLineage(pkm).ToArray();
@@ -1217,6 +1242,7 @@ namespace PKHeX.Core
                     ? "Ball unobtainable in origin generation."
                     : "No ball check satisfied, assuming illegal.", CheckIdentifier.Ball);
         }
+
         private CheckResult verifyHistory()
         {
             if (!Encounter.Valid)
@@ -1876,8 +1902,8 @@ namespace PKHeX.Core
                 int[] RelearnMoves = pkm.RelearnMoves;
                 foreach (MysteryGift mg in EventGiftMatch)
                 {
-                    int[] GiftMoves = mg.Moves;
-                    res = parseMoves(Moves, validMoves, RelearnMoves, validTMHM, validTutor, GiftMoves);
+                    int[] SpecialMoves = mg.Moves;
+                    res = parseMoves(Moves, validMoves, RelearnMoves, validTMHM, validTutor, SpecialMoves);
                     if (res.Any(r => !r.Valid))
                         continue;
 
@@ -1889,8 +1915,12 @@ namespace PKHeX.Core
             else
             {
                 int[] RelearnMoves = pkm.RelearnMoves;
-                int[] GiftMoves = (EncounterMatch as MysteryGift)?.Moves ?? new int[0];
-                res = parseMoves(Moves, validMoves, RelearnMoves, validTMHM, validTutor, GiftMoves);
+                int[] SpecialMoves = (EncounterMatch as MysteryGift)?.Moves ??
+                                     (EncounterMatch as EncounterStatic)?.Moves ??
+                                     (EncounterMatch as EncounterTrade)?.Moves ??
+                                     new int[0];
+
+                res = parseMoves(Moves, validMoves, RelearnMoves, validTMHM, validTutor, SpecialMoves);
             }
             if (Moves[0] == 0) // None
                 res[0] = new CheckResult(Severity.Invalid, "Invalid Move.", CheckIdentifier.Move);
@@ -1906,7 +1936,7 @@ namespace PKHeX.Core
 
             return res;
         }
-        private CheckResult[] parseMoves(int[] moves, int[] learn, int[] relearn, int[] tmhm, int[] tutor, int[] giftmoves)
+        private static CheckResult[] parseMoves(int[] moves, int[] learn, int[] relearn, int[] tmhm, int[] tutor, int[] special)
         {
             CheckResult[] res = new CheckResult[4];
             for (int i = 0; i < 4; i++)
@@ -1921,8 +1951,8 @@ namespace PKHeX.Core
                     res[i] = new CheckResult(Severity.Valid, "TM/HM.", CheckIdentifier.Move);
                 else if (tutor.Contains(moves[i]))
                     res[i] = new CheckResult(Severity.Valid, "Tutor.", CheckIdentifier.Move);
-                else if (giftmoves.Contains(moves[i]))
-                    res[i] = new CheckResult(Severity.Valid, "Mystery Gift Non-Relearn Move.", CheckIdentifier.Move);
+                else if (special.Contains(moves[i]))
+                    res[i] = new CheckResult(Severity.Valid, "Special Non-Relearn Move.", CheckIdentifier.Move);
                 else
                     res[i] = new CheckResult(Severity.Invalid, "Invalid Move.", CheckIdentifier.Move);
             }
