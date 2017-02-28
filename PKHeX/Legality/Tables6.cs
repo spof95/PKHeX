@@ -623,6 +623,9 @@ namespace PKHeX.Core
             577, // Solosis
             582, // Vanillite
             595, // Joltik
+
+            // Via Incense Breeding
+            298, 360, 406, 433, 438, 439, 440, 446, 458,
         };
         internal static readonly int[] Ban_DreamHidden =
         {
@@ -759,5 +762,10 @@ namespace PKHeX.Core
             05, 10, 05, 05, 15, 10, 05, 05, 05, 10, 10, 10, 10, 20, 25, 10, 20, 30, 25, 20, 20, 15, 20, 15, 20, 20, 10, 10, 10, 10, 10, 20, 10, 30, 15, 10, 10, 10, 20, 20, 05, 05, 05, 20, 10, 10, 20, 15, 20, 20, 
             10, 20, 30, 10, 10, 40, 40, 30, 20, 40, 20, 20, 10, 10, 10, 10, 05, 10, 10, 05, 05,
         };
+        internal static readonly int[] UnreleasedItems_6 =
+        {
+            // todo
+        };
+        internal static readonly bool[] ReleasedHeldItems_6 = Enumerable.Range(0, MaxItemID_6_AO+1).Select(i => HeldItem_AO.Contains((ushort)i) && !UnreleasedItems_6.Contains(i)).ToArray();
     }
 }

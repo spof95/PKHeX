@@ -89,5 +89,15 @@ namespace PKHeX.Core
             // HGSS balls not usable
             // Dream ball not usable in wild
         };
+
+        internal static readonly int[] FutureEvolutionsGen5 =
+        {
+            700
+        };
+        internal static readonly int[] UnreleasedItems_5 =
+        {
+            // todo
+        };
+        internal static readonly bool[] ReleasedHeldItems_5 = Enumerable.Range(0, MaxItemID_5_B2W2+1).Select(i => HeldItems_BW.Contains((ushort)i) && !UnreleasedItems_5.Contains(i)).ToArray();
     }
 }

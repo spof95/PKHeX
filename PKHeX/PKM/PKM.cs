@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.Linq;
 
 namespace PKHeX.Core
@@ -277,7 +276,7 @@ namespace PKHeX.Core
         public bool Gen3 => Version >= 1 && Version <= 5 || Version == 15;
         public bool Gen2 => Version == (int)GameVersion.GSC;
         public bool Gen1 => Version == (int)GameVersion.RBY;
-        public bool GenU => !(Gen7 || Gen6 || Gen5 || Gen4 || Gen3 || Gen2 || Gen1);
+        public bool GenU => !(Gen7 || Gen6 || Gen5 || Gen4 || Gen3 || Gen2 || Gen1 || VC);
         public int GenNumber
         {
             get
@@ -403,9 +402,17 @@ namespace PKHeX.Core
         }
 
         // Legality Extensions
-        private int MaxSpeciesID => Legal.getMaxSpeciesOrigin(Format);
         public virtual bool WasLink => false;
-        public virtual bool WasEgg => Egg_Location > 0;
+        private bool _WasEgg;
+        public virtual bool WasEgg
+        {
+            get
+            {
+                if (HasOriginalMetLocation)
+                    return Egg_Location > 0;
+                return _WasEgg;
+            } set { _WasEgg = value; }
+        }
         public virtual bool WasEvent => Met_Location > 40000 && Met_Location < 50000 || FatefulEncounter;
         public virtual bool WasEventEgg => ((Egg_Location > 40000 && Egg_Location < 50000) || (FatefulEncounter && Egg_Location > 0)) && Met_Level == 1;
         public virtual bool WasTradedEgg => Egg_Location == 30002;
@@ -453,6 +460,9 @@ namespace PKHeX.Core
             if (species < 0)
                 species = Species;
 
+            if (Format == Generation)
+                return true;
+
             if (Format < Generation)
                 return false; // Future
 
@@ -460,14 +470,14 @@ namespace PKHeX.Core
                 return false;
 
             // Sanity Check Species ID
-            if (Legal.getMaxSpeciesOrigin(GenNumber) < species)
+            if (Legal.getMaxSpeciesOrigin(GenNumber) < species && !Legal.getFutureGenEvolutions(GenNumber).Contains(species))
                 return false;
 
             int gen = GenNumber;
             switch (Generation)
             {
-                case 1: return VC;
-                case 2: return VC;
+                case 1:
+                case 2: return Format <= 2 || VC;
                 case 3: return Gen3;
                 case 4: return 3 <= gen && gen <= 4;
                 case 5: return 3 <= gen && gen <= 5;

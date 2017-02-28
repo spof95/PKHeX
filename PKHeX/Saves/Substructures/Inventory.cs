@@ -98,7 +98,7 @@ namespace PKHeX.Core
                     Index = (int)(val & 0x3FF),
                     Count = (int)(val >> 10 & 0x3FF),
                     New = (val & 0x40000000) != 0, // 30th bit is "NEW"
-                    FreeSpace = (val & 0x100000) != 0, // 22th bit is "FREE SPACE"
+                    FreeSpace = (val >> 20 & 0x3FF) != 0, // "FREE SPACE" sortIndex
                 };
             }
             Items = items;
@@ -175,6 +175,8 @@ namespace PKHeX.Core
             else
             {
                 int numStored = Data[Offset];
+                if (numStored > PouchDataSize) // uninitialized yellow (0xFF), sanity check for out-of-bounds values
+                    numStored = 0;
                 for (int i = 0; i < numStored; i++)
                 {
                     switch (Type)

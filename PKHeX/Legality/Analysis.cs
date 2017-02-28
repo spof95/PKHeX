@@ -7,13 +7,13 @@ namespace PKHeX.Core
     public partial class LegalityAnalysis
     {
         private PKM pkm;
-        private DexLevel[] EvoChain;
+        private DexLevel[][] EvoChainsAllGens;
         private readonly List<CheckResult> Parse = new List<CheckResult>();
 
-        private object EncounterMatch;
+        private object EncounterMatch, EncounterOriginal;
         private Type EncounterType;
         private bool EncounterIsMysteryGift => EncounterType.IsSubclassOf(typeof (MysteryGift));
-        private string EncounterName => Legal.getEncounterTypeName(pkm, EncounterMatch);
+        private string EncounterName => Legal.getEncounterTypeName(pkm, EncounterOriginal ?? EncounterMatch);
         private List<MysteryGift> EventGiftMatch;
         private CheckResult Encounter, History;
         private int[] RelearnBase;
@@ -42,6 +42,7 @@ namespace PKHeX.Core
                 switch (pk.Format) // prior to storing GameVersion
                 {
                     case 1: parsePK1(pk); break;
+                    case 2: parsePK1(pk); break;
                 }
 
                 if (!Parse.Any())
@@ -96,6 +97,7 @@ namespace PKHeX.Core
             verifyNickname();
             verifyDVs();
             verifyG1OT();
+            verifyEggMoves();
         }
         private void parsePK6(PKM pk)
         {
@@ -142,13 +144,13 @@ namespace PKHeX.Core
 
             Encounter = verifyEncounter();
             Parse.Add(Encounter);
-            EvoChain = Legal.getEvolutionChain(pkm, EncounterMatch);
+            EvoChainsAllGens = Legal.getEvolutionChainsAllGens(pkm, EncounterOriginal ?? EncounterMatch);
         }
         private void updateEncounterInfo()
         {
             EncounterMatch = EncounterMatch ?? pkm.Species;
 
-            EncounterType = EncounterMatch?.GetType();
+            EncounterType = (EncounterOriginal ?? EncounterMatch)?.GetType();
             if (EncounterType == typeof (MysteryGift))
                 EncounterType = EncounterType.BaseType;
         }
@@ -174,6 +176,10 @@ namespace PKHeX.Core
             verifyForm();
             verifyMisc();
             verifyGender();
+            verifyItem();
+
+            if (pkm.GenNumber < 5)
+                verifyEggMoves();
 
             verifyVersionEvolution();
             // SecondaryChecked = true;
@@ -257,7 +263,7 @@ namespace PKHeX.Core
                 return null;
             if (!Parsed)
                 return new int[4];
-            return Legal.getValidMoves(pkm, EvoChain, Tutor: tutor, Machine: tm, MoveReminder: reminder).Skip(1).ToArray(); // skip move 0
+            return Legal.getValidMoves(pkm, EvoChainsAllGens, Tutor: tutor, Machine: tm, MoveReminder: reminder).Skip(1).ToArray(); // skip move 0
         }
 
         public EncounterStatic getSuggestedMetInfo()

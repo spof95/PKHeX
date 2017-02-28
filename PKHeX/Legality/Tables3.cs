@@ -82,5 +82,22 @@ namespace PKHeX.Core
             590, 591, 592, 593
         };
         internal static readonly int[] WildPokeBalls3 = {1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12};
+
+        internal static readonly int[] FutureEvolutionsGen3 =
+        {
+            407,424,429,430,461,462,463,464,465,466,467,468,469,470,471,472,473,474,475,476,477,700
+        };
+
+        internal static readonly int[] FutureEvolutionsGen3_LevelUp = 
+        {
+            424, 461, 462, 463, 465, 469, 470, 471, 472, 473, 476
+        };
+        // Ambipom Weavile Magnezone Lickilicky Tangrowth
+        // Yanmega Leafeon Glaceon Mamoswine Gliscor Probopass
+        internal static readonly int[] UnreleasedItems_3 =
+        {
+            // todo
+        };
+        internal static readonly bool[] ReleasedHeldItems_3 = Enumerable.Range(0, MaxItemID_3+1).Select(i => HeldItems_RS.Contains((ushort)i) && !UnreleasedItems_3.Contains(i)).ToArray();
     }
 }

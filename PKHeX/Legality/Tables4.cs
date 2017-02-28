@@ -130,5 +130,15 @@ namespace PKHeX.Core
             17, 18, 19, 20, 21, 22,
             // Comp Ball not usable in wild
         };
+
+        internal static readonly int[] FutureEvolutionsGen4 =
+        {
+            700
+        };
+        internal static readonly int[] UnreleasedItems_4 =
+        {
+            // todo
+        };
+        internal static readonly bool[] ReleasedHeldItems_4 = Enumerable.Range(0, MaxItemID_4_HGSS+1).Select(i => HeldItems_HGSS.Contains((ushort)i) && !UnreleasedItems_4.Contains(i)).ToArray();
     }
 }
