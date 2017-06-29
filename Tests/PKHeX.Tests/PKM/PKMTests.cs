@@ -1,12 +1,14 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Linq;
+using PKHeX.Core;
 
 namespace PKHeX.Tests.PKM
 {
     [TestClass]
     public class PKMTests
     {
-        const string DateTestCategory = "PKM Date Tests";
+        private const string DateTestCategory = "PKM Date Tests";
 
         [TestMethod]
         [TestCategory(DateTestCategory)]

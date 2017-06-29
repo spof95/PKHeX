@@ -139,6 +139,10 @@ namespace PKHeX.WinForms
             this.L_Z = new System.Windows.Forms.Label();
             this.L_X = new System.Windows.Forms.Label();
             this.Tab_BattleTree = new System.Windows.Forms.TabPage();
+            this.GB_UnlockSupers = new System.Windows.Forms.GroupBox();
+            this.CHK_UnlockSuperMulti = new System.Windows.Forms.CheckBox();
+            this.CHK_UnlockSuperDoubles = new System.Windows.Forms.CheckBox();
+            this.CHK_UnlockSuperSingles = new System.Windows.Forms.CheckBox();
             this.L_Super = new System.Windows.Forms.Label();
             this.L_Regular = new System.Windows.Forms.Label();
             this.NUD_SMStreak2 = new System.Windows.Forms.NumericUpDown();
@@ -176,6 +180,18 @@ namespace PKHeX.WinForms
             this.B_Fashion = new System.Windows.Forms.Button();
             this.TB_PlazaName = new System.Windows.Forms.TextBox();
             this.L_PlazaName = new System.Windows.Forms.Label();
+            this.L_Vivillon = new System.Windows.Forms.Label();
+            this.CB_Vivillon = new System.Windows.Forms.ComboBox();
+            this.L_DaysFromRefreshed = new System.Windows.Forms.Label();
+            this.NUD_DaysFromRefreshed = new System.Windows.Forms.NumericUpDown();
+            this.L_BallThrowType = new System.Windows.Forms.Label();
+            this.CB_BallThrowType = new System.Windows.Forms.ComboBox();
+            this.CB_BallThrowTypeListMode = new System.Windows.Forms.ComboBox();
+            this.LB_BallThrowTypeUnlocked = new System.Windows.Forms.ListBox();
+            this.LB_BallThrowTypeLearned = new System.Windows.Forms.ListBox();
+            this.L_Stamps = new System.Windows.Forms.Label();
+            this.LB_Stamps = new System.Windows.Forms.ListBox();
+            this.CHK_UnlockMega = new System.Windows.Forms.CheckBox();
             this.TC_Editor.SuspendLayout();
             this.Tab_Overview.SuspendLayout();
             this.GB_Stats.SuspendLayout();
@@ -191,6 +207,7 @@ namespace PKHeX.WinForms
             ((System.ComponentModel.ISupportInitialize)(this.NUD_Y)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUD_X)).BeginInit();
             this.Tab_BattleTree.SuspendLayout();
+            this.GB_UnlockSupers.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NUD_SMStreak2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUD_SCStreak2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUD_SMStreak1)).BeginInit();
@@ -204,6 +221,7 @@ namespace PKHeX.WinForms
             ((System.ComponentModel.ISupportInitialize)(this.NUD_RMStreak0)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUD_RCStreak0)).BeginInit();
             this.Tab_Misc.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NUD_DaysFromRefreshed)).BeginInit();
             this.GB_PokeFinder.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NUD_SnapCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUD_ThumbsRecord)).BeginInit();
@@ -240,7 +258,7 @@ namespace PKHeX.WinForms
             this.TB_OTName.TabIndex = 2;
             this.TB_OTName.Text = "WWWWWWWWWWWW";
             this.TB_OTName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.TB_OTName.MouseDown += new System.Windows.Forms.MouseEventHandler(this.clickOT);
+            this.TB_OTName.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ClickOT);
             // 
             // L_TrainerName
             // 
@@ -296,8 +314,8 @@ namespace PKHeX.WinForms
             this.MT_TID.Size = new System.Drawing.Size(39, 20);
             this.MT_TID.TabIndex = 8;
             this.MT_TID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.MT_TID.TextChanged += new System.EventHandler(this.changeFFFF);
-            this.MT_TID.MouseHover += new System.EventHandler(this.showTSV);
+            this.MT_TID.TextChanged += new System.EventHandler(this.ChangeFFFF);
+            this.MT_TID.MouseHover += new System.EventHandler(this.ShowTSV);
             // 
             // MT_SID
             // 
@@ -308,8 +326,8 @@ namespace PKHeX.WinForms
             this.MT_SID.Size = new System.Drawing.Size(39, 20);
             this.MT_SID.TabIndex = 9;
             this.MT_SID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.MT_SID.TextChanged += new System.EventHandler(this.changeFFFF);
-            this.MT_SID.MouseHover += new System.EventHandler(this.showTSV);
+            this.MT_SID.TextChanged += new System.EventHandler(this.ChangeFFFF);
+            this.MT_SID.MouseHover += new System.EventHandler(this.ShowTSV);
             // 
             // L_Saying5
             // 
@@ -426,7 +444,7 @@ namespace PKHeX.WinForms
             this.MT_Seconds.Size = new System.Drawing.Size(22, 20);
             this.MT_Seconds.TabIndex = 28;
             this.MT_Seconds.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.MT_Seconds.TextChanged += new System.EventHandler(this.change255);
+            this.MT_Seconds.TextChanged += new System.EventHandler(this.Change255);
             // 
             // MT_Minutes
             // 
@@ -436,7 +454,7 @@ namespace PKHeX.WinForms
             this.MT_Minutes.Size = new System.Drawing.Size(22, 20);
             this.MT_Minutes.TabIndex = 27;
             this.MT_Minutes.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.MT_Minutes.TextChanged += new System.EventHandler(this.change255);
+            this.MT_Minutes.TextChanged += new System.EventHandler(this.Change255);
             // 
             // L_Hours
             // 
@@ -500,7 +518,7 @@ namespace PKHeX.WinForms
             this.CB_Country.Name = "CB_Country";
             this.CB_Country.Size = new System.Drawing.Size(93, 21);
             this.CB_Country.TabIndex = 17;
-            this.CB_Country.SelectedIndexChanged += new System.EventHandler(this.updateCountry);
+            this.CB_Country.SelectedIndexChanged += new System.EventHandler(this.UpdateCountry);
             // 
             // B_MaxCash
             // 
@@ -815,6 +833,8 @@ namespace PKHeX.WinForms
             // 
             // Tab_Overview
             // 
+            this.Tab_Overview.Controls.Add(this.CB_Vivillon);
+            this.Tab_Overview.Controls.Add(this.L_Vivillon);
             this.Tab_Overview.Controls.Add(this.B_GenTID);
             this.Tab_Overview.Controls.Add(this.L_G7TID);
             this.Tab_Overview.Controls.Add(this.MT_G7TID);
@@ -901,7 +921,7 @@ namespace PKHeX.WinForms
             this.NUD_Stat.Name = "NUD_Stat";
             this.NUD_Stat.Size = new System.Drawing.Size(103, 20);
             this.NUD_Stat.TabIndex = 31;
-            this.NUD_Stat.ValueChanged += new System.EventHandler(this.changeStatVal);
+            this.NUD_Stat.ValueChanged += new System.EventHandler(this.ChangeStatVal);
             // 
             // NUD_FC
             // 
@@ -985,7 +1005,7 @@ namespace PKHeX.WinForms
             this.CB_Stats.Name = "CB_Stats";
             this.CB_Stats.Size = new System.Drawing.Size(140, 21);
             this.CB_Stats.TabIndex = 23;
-            this.CB_Stats.SelectedIndexChanged += new System.EventHandler(this.changeStat);
+            this.CB_Stats.SelectedIndexChanged += new System.EventHandler(this.ChangeStat);
             // 
             // CB_AlolaTime
             // 
@@ -1155,7 +1175,7 @@ namespace PKHeX.WinForms
             this.NUD_R.Name = "NUD_R";
             this.NUD_R.Size = new System.Drawing.Size(96, 20);
             this.NUD_R.TabIndex = 55;
-            this.NUD_R.ValueChanged += new System.EventHandler(this.changeMapValue);
+            this.NUD_R.ValueChanged += new System.EventHandler(this.ChangeMapValue);
             // 
             // L_R
             // 
@@ -1185,7 +1205,7 @@ namespace PKHeX.WinForms
             this.NUD_Z.Name = "NUD_Z";
             this.NUD_Z.Size = new System.Drawing.Size(96, 20);
             this.NUD_Z.TabIndex = 53;
-            this.NUD_Z.ValueChanged += new System.EventHandler(this.changeMapValue);
+            this.NUD_Z.ValueChanged += new System.EventHandler(this.ChangeMapValue);
             // 
             // NUD_M
             // 
@@ -1198,7 +1218,7 @@ namespace PKHeX.WinForms
             this.NUD_M.Name = "NUD_M";
             this.NUD_M.Size = new System.Drawing.Size(50, 20);
             this.NUD_M.TabIndex = 52;
-            this.NUD_M.ValueChanged += new System.EventHandler(this.changeMapValue);
+            this.NUD_M.ValueChanged += new System.EventHandler(this.ChangeMapValue);
             // 
             // NUD_Y
             // 
@@ -1219,7 +1239,7 @@ namespace PKHeX.WinForms
             this.NUD_Y.Name = "NUD_Y";
             this.NUD_Y.Size = new System.Drawing.Size(96, 20);
             this.NUD_Y.TabIndex = 51;
-            this.NUD_Y.ValueChanged += new System.EventHandler(this.changeMapValue);
+            this.NUD_Y.ValueChanged += new System.EventHandler(this.ChangeMapValue);
             // 
             // NUD_X
             // 
@@ -1240,7 +1260,7 @@ namespace PKHeX.WinForms
             this.NUD_X.Name = "NUD_X";
             this.NUD_X.Size = new System.Drawing.Size(96, 20);
             this.NUD_X.TabIndex = 50;
-            this.NUD_X.ValueChanged += new System.EventHandler(this.changeMapValue);
+            this.NUD_X.ValueChanged += new System.EventHandler(this.ChangeMapValue);
             // 
             // L_Y
             // 
@@ -1280,6 +1300,7 @@ namespace PKHeX.WinForms
             // 
             // Tab_BattleTree
             // 
+            this.Tab_BattleTree.Controls.Add(this.GB_UnlockSupers);
             this.Tab_BattleTree.Controls.Add(this.L_Super);
             this.Tab_BattleTree.Controls.Add(this.L_Regular);
             this.Tab_BattleTree.Controls.Add(this.NUD_SMStreak2);
@@ -1307,6 +1328,48 @@ namespace PKHeX.WinForms
             this.Tab_BattleTree.TabIndex = 5;
             this.Tab_BattleTree.Text = "Battle Tree";
             this.Tab_BattleTree.UseVisualStyleBackColor = true;
+            // 
+            // GB_UnlockSupers
+            // 
+            this.GB_UnlockSupers.Controls.Add(this.CHK_UnlockSuperMulti);
+            this.GB_UnlockSupers.Controls.Add(this.CHK_UnlockSuperDoubles);
+            this.GB_UnlockSupers.Controls.Add(this.CHK_UnlockSuperSingles);
+            this.GB_UnlockSupers.Location = new System.Drawing.Point(6, 240);
+            this.GB_UnlockSupers.Name = "GB_UnlockSupers";
+            this.GB_UnlockSupers.Size = new System.Drawing.Size(199, 40);
+            this.GB_UnlockSupers.TabIndex = 95;
+            this.GB_UnlockSupers.TabStop = false;
+            this.GB_UnlockSupers.Text = "Unlock Super*";
+            // 
+            // CHK_UnlockSuperMulti
+            // 
+            this.CHK_UnlockSuperMulti.AutoSize = true;
+            this.CHK_UnlockSuperMulti.Location = new System.Drawing.Point(144, 18);
+            this.CHK_UnlockSuperMulti.Name = "CHK_UnlockSuperMulti";
+            this.CHK_UnlockSuperMulti.Size = new System.Drawing.Size(49, 16);
+            this.CHK_UnlockSuperMulti.TabIndex = 2;
+            this.CHK_UnlockSuperMulti.Text = "Multi";
+            this.CHK_UnlockSuperMulti.UseVisualStyleBackColor = true;
+            // 
+            // CHK_UnlockSuperDoubles
+            // 
+            this.CHK_UnlockSuperDoubles.AutoSize = true;
+            this.CHK_UnlockSuperDoubles.Location = new System.Drawing.Point(73, 18);
+            this.CHK_UnlockSuperDoubles.Name = "CHK_UnlockSuperDoubles";
+            this.CHK_UnlockSuperDoubles.Size = new System.Drawing.Size(65, 16);
+            this.CHK_UnlockSuperDoubles.TabIndex = 1;
+            this.CHK_UnlockSuperDoubles.Text = "Doubles";
+            this.CHK_UnlockSuperDoubles.UseVisualStyleBackColor = true;
+            // 
+            // CHK_UnlockSuperSingles
+            // 
+            this.CHK_UnlockSuperSingles.AutoSize = true;
+            this.CHK_UnlockSuperSingles.Location = new System.Drawing.Point(6, 18);
+            this.CHK_UnlockSuperSingles.Name = "CHK_UnlockSuperSingles";
+            this.CHK_UnlockSuperSingles.Size = new System.Drawing.Size(61, 16);
+            this.CHK_UnlockSuperSingles.TabIndex = 0;
+            this.CHK_UnlockSuperSingles.Text = "Singles";
+            this.CHK_UnlockSuperSingles.UseVisualStyleBackColor = true;
             // 
             // L_Super
             // 
@@ -1586,6 +1649,16 @@ namespace PKHeX.WinForms
             // 
             // Tab_Misc
             // 
+            this.Tab_Misc.Controls.Add(this.CHK_UnlockMega);
+            this.Tab_Misc.Controls.Add(this.L_BallThrowType);
+            this.Tab_Misc.Controls.Add(this.CB_BallThrowType);
+            this.Tab_Misc.Controls.Add(this.CB_BallThrowTypeListMode);
+            this.Tab_Misc.Controls.Add(this.LB_BallThrowTypeUnlocked);
+            this.Tab_Misc.Controls.Add(this.LB_BallThrowTypeLearned);
+            this.Tab_Misc.Controls.Add(this.L_Stamps);
+            this.Tab_Misc.Controls.Add(this.LB_Stamps);
+            this.Tab_Misc.Controls.Add(this.L_DaysFromRefreshed);
+            this.Tab_Misc.Controls.Add(this.NUD_DaysFromRefreshed);
             this.Tab_Misc.Controls.Add(this.L_PlazaName);
             this.Tab_Misc.Controls.Add(this.TB_PlazaName);
             this.Tab_Misc.Controls.Add(this.CB_Fashion);
@@ -1774,7 +1847,7 @@ namespace PKHeX.WinForms
             // TB_PlazaName
             // 
             this.TB_PlazaName.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TB_PlazaName.Location = new System.Drawing.Point(217, 139);
+            this.TB_PlazaName.Location = new System.Drawing.Point(217, 150);
             this.TB_PlazaName.MaxLength = 20;
             this.TB_PlazaName.Name = "TB_PlazaName";
             this.TB_PlazaName.Size = new System.Drawing.Size(159, 20);
@@ -1784,12 +1857,139 @@ namespace PKHeX.WinForms
             // L_PlazaName
             // 
             this.L_PlazaName.AutoSize = true;
-            this.L_PlazaName.Location = new System.Drawing.Point(214, 119);
+            this.L_PlazaName.Location = new System.Drawing.Point(214, 130);
             this.L_PlazaName.Name = "L_PlazaName";
             this.L_PlazaName.Size = new System.Drawing.Size(106, 13);
             this.L_PlazaName.TabIndex = 62;
             this.L_PlazaName.Text = "Festival Plaza Name:";
             this.L_PlazaName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // L_Vivillon
+            // 
+            this.L_Vivillon.Location = new System.Drawing.Point(-1, 101);
+            this.L_Vivillon.Name = "L_Vivillon";
+            this.L_Vivillon.Size = new System.Drawing.Size(80, 12);
+            this.L_Vivillon.TabIndex = 64;
+            this.L_Vivillon.Text = "Vivillon:";
+            this.L_Vivillon.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // CB_Vivillon
+            // 
+            this.CB_Vivillon.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CB_Vivillon.FormattingEnabled = true;
+            this.CB_Vivillon.Location = new System.Drawing.Point(85, 98);
+            this.CB_Vivillon.Name = "CB_Vivillon";
+            this.CB_Vivillon.Size = new System.Drawing.Size(93, 20);
+            this.CB_Vivillon.TabIndex = 65;
+            // 
+            // L_DaysFromRefreshed
+            // 
+            this.L_DaysFromRefreshed.Location = new System.Drawing.Point(144, 28);
+            this.L_DaysFromRefreshed.Name = "L_DaysFromRefreshed";
+            this.L_DaysFromRefreshed.Size = new System.Drawing.Size(117, 18);
+            this.L_DaysFromRefreshed.TabIndex = 63;
+            this.L_DaysFromRefreshed.Text = "Days from Refreshed:";
+            this.L_DaysFromRefreshed.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // NUD_DaysFromRefreshed
+            // 
+            this.NUD_DaysFromRefreshed.Location = new System.Drawing.Point(267, 30);
+            this.NUD_DaysFromRefreshed.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.NUD_DaysFromRefreshed.Name = "NUD_DaysFromRefreshed";
+            this.NUD_DaysFromRefreshed.Size = new System.Drawing.Size(42, 19);
+            this.NUD_DaysFromRefreshed.TabIndex = 64;
+            this.NUD_DaysFromRefreshed.Value = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            // 
+            // L_BallThrowType
+            // 
+            this.L_BallThrowType.Location = new System.Drawing.Point(144, 50);
+            this.L_BallThrowType.Name = "L_BallThrowType";
+            this.L_BallThrowType.Size = new System.Drawing.Size(117, 20);
+            this.L_BallThrowType.TabIndex = 65;
+            this.L_BallThrowType.Text = "Ball Throw Type:";
+            this.L_BallThrowType.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // CB_BallThrowType
+            // 
+            this.CB_BallThrowType.FormattingEnabled = true;
+            this.CB_BallThrowType.Location = new System.Drawing.Point(267, 51);
+            this.CB_BallThrowType.Name = "CB_BallThrowType";
+            this.CB_BallThrowType.Size = new System.Drawing.Size(109, 21);
+            this.CB_BallThrowType.TabIndex = 66;
+            // 
+            // CB_BallThrowTypeListMode
+            // 
+            this.CB_BallThrowTypeListMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CB_BallThrowTypeListMode.FormattingEnabled = true;
+            this.CB_BallThrowTypeListMode.Items.AddRange(new object[] {
+            "unlocked list",
+            "learned list"});
+            this.CB_BallThrowTypeListMode.Location = new System.Drawing.Point(154, 76);
+            this.CB_BallThrowTypeListMode.Name = "CB_BallThrowTypeListMode";
+            this.CB_BallThrowTypeListMode.Size = new System.Drawing.Size(107, 21);
+            this.CB_BallThrowTypeListMode.TabIndex = 67;
+            this.CB_BallThrowTypeListMode.SelectedIndexChanged += new System.EventHandler(this.UpdateBattleStyle);
+            // 
+            // LB_BallThrowTypeUnlocked
+            // 
+            this.LB_BallThrowTypeUnlocked.FormattingEnabled = true;
+            this.LB_BallThrowTypeUnlocked.ItemHeight = 12;
+            this.LB_BallThrowTypeUnlocked.Location = new System.Drawing.Point(267, 74);
+            this.LB_BallThrowTypeUnlocked.Name = "LB_BallThrowTypeUnlocked";
+            this.LB_BallThrowTypeUnlocked.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
+            this.LB_BallThrowTypeUnlocked.Size = new System.Drawing.Size(109, 52);
+            this.LB_BallThrowTypeUnlocked.TabIndex = 68;
+            this.LB_BallThrowTypeUnlocked.SelectedIndexChanged += new System.EventHandler(this.UpdateBallThrowTypeUnlocked);
+            // 
+            // LB_BallThrowTypeLearned
+            // 
+            this.LB_BallThrowTypeLearned.FormattingEnabled = true;
+            this.LB_BallThrowTypeLearned.ItemHeight = 12;
+            this.LB_BallThrowTypeLearned.Location = new System.Drawing.Point(267, 74);
+            this.LB_BallThrowTypeLearned.Name = "LB_BallThrowTypeLearned";
+            this.LB_BallThrowTypeLearned.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
+            this.LB_BallThrowTypeLearned.Size = new System.Drawing.Size(109, 52);
+            this.LB_BallThrowTypeLearned.TabIndex = 69;
+            this.LB_BallThrowTypeLearned.Visible = false;
+            this.LB_BallThrowTypeLearned.SelectedIndexChanged += new System.EventHandler(this.UpdateBallThrowTypeLearned);
+            // 
+            // L_Stamps
+            // 
+            this.L_Stamps.AutoSize = true;
+            this.L_Stamps.Location = new System.Drawing.Point(214, 174);
+            this.L_Stamps.Name = "L_Stamps";
+            this.L_Stamps.Size = new System.Drawing.Size(45, 13);
+            this.L_Stamps.TabIndex = 70;
+            this.L_Stamps.Text = "Stamps:";
+            this.L_Stamps.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // LB_Stamps
+            // 
+            this.LB_Stamps.FormattingEnabled = true;
+            this.LB_Stamps.ItemHeight = 12;
+            this.LB_Stamps.Location = new System.Drawing.Point(217, 194);
+            this.LB_Stamps.Name = "LB_Stamps";
+            this.LB_Stamps.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
+            this.LB_Stamps.Size = new System.Drawing.Size(159, 52);
+            this.LB_Stamps.TabIndex = 71;
+            // 
+            // CHK_UnlockMega
+            // 
+            this.CHK_UnlockMega.AutoSize = true;
+            this.CHK_UnlockMega.Location = new System.Drawing.Point(6, 256);
+            this.CHK_UnlockMega.Name = "CHK_UnlockMega";
+            this.CHK_UnlockMega.Size = new System.Drawing.Size(90, 17);
+            this.CHK_UnlockMega.TabIndex = 72;
+            this.CHK_UnlockMega.Text = "Unlock Mega";
+            this.CHK_UnlockMega.UseVisualStyleBackColor = true;
             // 
             // SAV_Trainer7
             // 
@@ -1824,6 +2024,8 @@ namespace PKHeX.WinForms
             ((System.ComponentModel.ISupportInitialize)(this.NUD_Y)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUD_X)).EndInit();
             this.Tab_BattleTree.ResumeLayout(false);
+            this.GB_UnlockSupers.ResumeLayout(false);
+            this.GB_UnlockSupers.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NUD_SMStreak2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUD_SCStreak2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUD_SMStreak1)).EndInit();
@@ -1838,6 +2040,7 @@ namespace PKHeX.WinForms
             ((System.ComponentModel.ISupportInitialize)(this.NUD_RCStreak0)).EndInit();
             this.Tab_Misc.ResumeLayout(false);
             this.Tab_Misc.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NUD_DaysFromRefreshed)).EndInit();
             this.GB_PokeFinder.ResumeLayout(false);
             this.GB_PokeFinder.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NUD_SnapCount)).EndInit();
@@ -1996,5 +2199,21 @@ namespace PKHeX.WinForms
         private System.Windows.Forms.MaskedTextBox MT_G7TID;
         private System.Windows.Forms.TextBox TB_PlazaName;
         private System.Windows.Forms.Label L_PlazaName;
+        private System.Windows.Forms.Label L_Vivillon;
+        private System.Windows.Forms.ComboBox CB_Vivillon;
+        private System.Windows.Forms.NumericUpDown NUD_DaysFromRefreshed;
+        private System.Windows.Forms.Label L_DaysFromRefreshed;
+        private System.Windows.Forms.Label L_BallThrowType;
+        private System.Windows.Forms.ComboBox CB_BallThrowType;
+        private System.Windows.Forms.ComboBox CB_BallThrowTypeListMode;
+        private System.Windows.Forms.ListBox LB_BallThrowTypeUnlocked;
+        private System.Windows.Forms.ListBox LB_BallThrowTypeLearned;
+        private System.Windows.Forms.Label L_Stamps;
+        private System.Windows.Forms.ListBox LB_Stamps;
+        private System.Windows.Forms.GroupBox GB_UnlockSupers;
+        private System.Windows.Forms.CheckBox CHK_UnlockSuperMulti;
+        private System.Windows.Forms.CheckBox CHK_UnlockSuperDoubles;
+        private System.Windows.Forms.CheckBox CHK_UnlockSuperSingles;
+        private System.Windows.Forms.CheckBox CHK_UnlockMega;
     }
 }

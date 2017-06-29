@@ -47,6 +47,7 @@
             this.L_Count = new System.Windows.Forms.Label();
             this.NUD_Count = new System.Windows.Forms.NumericUpDown();
             this.CHK_NEW = new System.Windows.Forms.CheckBox();
+            this.giveModify = new System.Windows.Forms.ToolStripMenuItem();
             this.sortMenu.SuspendLayout();
             this.giveMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NUD_Count)).BeginInit();
@@ -85,7 +86,7 @@
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(291, 336);
             this.tabControl1.TabIndex = 17;
-            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.switchBag);
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.SwitchBag);
             // 
             // IL_Pouch
             // 
@@ -141,50 +142,51 @@
             this.mnuSortName.Name = "mnuSortName";
             this.mnuSortName.Size = new System.Drawing.Size(158, 22);
             this.mnuSortName.Text = "Name";
-            this.mnuSortName.Click += new System.EventHandler(this.sortByName);
+            this.mnuSortName.Click += new System.EventHandler(this.SortByName);
             // 
             // mnuSortNameReverse
             // 
             this.mnuSortNameReverse.Name = "mnuSortNameReverse";
             this.mnuSortNameReverse.Size = new System.Drawing.Size(158, 22);
             this.mnuSortNameReverse.Text = "Name (Reverse)";
-            this.mnuSortNameReverse.Click += new System.EventHandler(this.sortByName);
+            this.mnuSortNameReverse.Click += new System.EventHandler(this.SortByName);
             // 
             // mnuSortCount
             // 
             this.mnuSortCount.Name = "mnuSortCount";
             this.mnuSortCount.Size = new System.Drawing.Size(158, 22);
             this.mnuSortCount.Text = "Count";
-            this.mnuSortCount.Click += new System.EventHandler(this.sortByCount);
+            this.mnuSortCount.Click += new System.EventHandler(this.SortByCount);
             // 
             // mnuSortCountReverse
             // 
             this.mnuSortCountReverse.Name = "mnuSortCountReverse";
             this.mnuSortCountReverse.Size = new System.Drawing.Size(158, 22);
             this.mnuSortCountReverse.Text = "Count (Reverse)";
-            this.mnuSortCountReverse.Click += new System.EventHandler(this.sortByCount);
+            this.mnuSortCountReverse.Click += new System.EventHandler(this.SortByCount);
             // 
             // giveMenu
             // 
             this.giveMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.giveAll,
-            this.giveNone});
+            this.giveNone,
+            this.giveModify});
             this.giveMenu.Name = "modifyMenu";
-            this.giveMenu.Size = new System.Drawing.Size(104, 48);
+            this.giveMenu.Size = new System.Drawing.Size(153, 92);
             // 
             // giveAll
             // 
             this.giveAll.Name = "giveAll";
-            this.giveAll.Size = new System.Drawing.Size(103, 22);
+            this.giveAll.Size = new System.Drawing.Size(152, 22);
             this.giveAll.Text = "All";
-            this.giveAll.Click += new System.EventHandler(this.giveAllItems);
+            this.giveAll.Click += new System.EventHandler(this.GiveAllItems);
             // 
             // giveNone
             // 
             this.giveNone.Name = "giveNone";
-            this.giveNone.Size = new System.Drawing.Size(103, 22);
+            this.giveNone.Size = new System.Drawing.Size(152, 22);
             this.giveNone.Text = "None";
-            this.giveNone.Click += new System.EventHandler(this.removeAllItems);
+            this.giveNone.Click += new System.EventHandler(this.RemoveAllItems);
             // 
             // L_Count
             // 
@@ -226,6 +228,13 @@
             this.CHK_NEW.TabIndex = 22;
             this.CHK_NEW.Text = "Flag NEW";
             this.CHK_NEW.UseVisualStyleBackColor = true;
+            // 
+            // giveModify
+            // 
+            this.giveModify.Name = "giveModify";
+            this.giveModify.Size = new System.Drawing.Size(152, 22);
+            this.giveModify.Text = "Modify";
+            this.giveModify.Click += new System.EventHandler(this.ModifyAllItems);
             // 
             // SAV_Inventory
             // 
@@ -273,5 +282,6 @@
         private System.Windows.Forms.Label L_Count;
         private System.Windows.Forms.NumericUpDown NUD_Count;
         private System.Windows.Forms.CheckBox CHK_NEW;
+        private System.Windows.Forms.ToolStripMenuItem giveModify;
     }
 }
